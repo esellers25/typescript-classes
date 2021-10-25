@@ -23,11 +23,20 @@ class Department {
 
 class ITDepartment extends Department {
     private firstAdmin: string; 
+    private static instance: ITDepartment; 
     
-    constructor(id: number, private admins: string[]){
+    private constructor(id: number, private admins: string[]){
         super('IT', id); 
         this.firstAdmin = this.admins[0]; 
         this.addAdmins(admins); 
+    }
+
+    static getInstance(){
+        if(this.instance){
+            return this.instance; 
+        }
+        this.instance = new ITDepartment(21, ['Erin', 'Jon']); 
+        return this.instance; 
     }
 
     addAdmins(adminList: string[]){
@@ -54,6 +63,20 @@ class ITDepartment extends Department {
     }
 }
 
+class EditorialDepartment extends Department {
+    constructor(name: string, id: number, public titles: string[]){
+        super(`${name} Editorial`, id)
+    }
+
+    addTitle(name: string){
+        this.titles.push(name)
+    }
+
+    printTitles(){
+        console.log(this.titles, this.titles.length)
+    }
+}
+
 const accounting = new Department("Accounting", 15); 
 accounting.addEmployee("Stephanie");
 accounting.addEmployee("Natalie");
@@ -63,14 +86,15 @@ accounting.printEmployeeInfo();
 accounting.name = "Business Finances";
 accounting.describe(); 
 
-const itDept = new ITDepartment(21, ['Erin', 'Jon']); 
+const itDept = ITDepartment.getInstance(); 
 itDept.describe();
 itDept.printEmployeeInfo(); 
 console.log(itDept.primaryAdmin);
 itDept.primaryAdmin = 'Tammy';
 console.log(itDept.primaryAdmin);
 
- 
+const knopf = new EditorialDepartment('Knopf', 35, ['Beloved', 'Open', 'Bad Blood'])
+
 
 // const accountingCopy = { name: "duplicate", describe: accounting.describe };
 
